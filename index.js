@@ -25,6 +25,34 @@ let server = app.listen(8070, function () {
 // 调用
 callHandel("all");
 
+// 公用组件部分,提供一个方法。
+module.exports = {
+  reptile(name,trip){  // 给外界提供一个调用的接口
+  // 提供一个输入的地方，后面需要判断
+    if (null == name){
+      let name = "";
+    }
+    tuniuReq =  name;
+    ctripReq =  name;
+  
+  // 判断要调用那个网站数据
+    if ( null == trip) {
+      let trip = "all";
+    }
+    if ( trip == "tuniu" ){
+      // 调用途牛
+      send.send("tuniu",tuniuReq);
+    } else if ( trip == "ctrip") {
+      // 调用携程
+      send.send("ctrip",ctripReq);
+    }else if ( trip == "all" ) {
+      // 调用携程
+      send.send("ctrip",ctripReq);
+      // 调用途牛
+      send.send("tuniu",tuniuReq);
+    }
+  },
+}
 
 // 调用发送请求的ajax
 function callHandel(trip){

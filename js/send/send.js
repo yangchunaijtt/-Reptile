@@ -32,7 +32,7 @@ module.exports = {
     }
 
     // 调用发送的ajax
-    console.log("url",url);
+    console.log("url",url,tips);
     let data;    // 返回的data。
 
     // 发送ajax的get请求
