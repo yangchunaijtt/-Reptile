@@ -18,6 +18,10 @@
   reptile.reptile("上海","");
 ```
 (2):trip:输入要爬那几个网站的数据：(目前有：途牛，携程。)(可以输入四个参数："","tuniu","ctrip","all"),默认为"all"。
+"tuniu",
+"ctrip",
+
+"all",
 ```
   reptile.reptile("","all");
 ```
