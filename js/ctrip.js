@@ -1,5 +1,6 @@
 /**
  * 主要用来处理携程数据
+ * class.js有点弃用了。
  */
 
 const cheerio = require('cheerio');
@@ -32,41 +33,15 @@ function ctripHandle(res,req){
   // console.log("携程数据类型",typeof res);
 
   let $ = cheerio.load(res.text);
-  // console.log("携程的req",req);
+  // console.log("携程DOM",false == $('#_main .base_bd #_prd'));
+  if ( $('#_main').first() ) {
+    $('#_main').each((idx,ele) =>{
+      // console.log("携程的数据",$(ele).text())
 
-  // 发送post请求
+    })
+  }
   
-  request.post('https://vacations.ctrip.com/tour-mainsite-vacations/api/product')
-  .set('Content-Type', 'application/json')
-  .send({"params":[{"Id":21564559,"Bu":"GT","Did":0,"RuleId":0},{"Id":22497213,"Bu":"GT","Did":213},{"Id":19466216,"Bu":"GT","Did":213},{"Id":18091167,"Bu":"GT","Did":213},{"Id":16334303,"Bu":"GT","Did":213},{"Id":22897228,"Bu":"GT","Did":213},{"Id":23165630,"Bu":"GT","Did":213}],"keyword":"西湖"})
-  .end((err,res) => {
-    if (err){
-      console.log("携程post请求出错");
-    }else {
-      ctripPostJson = JSON.parse(res.text);
-      console.log("携程post请求",ctripPostJson,typeof JSON.parse(res.text));
-      
-      
-      // name  = res.body[0]
-      // price = 
-      // time  = 
-      // supplier = 
-      // score    = 
-      // people   = 
-      let dataOne = {
-        name:name,
-        price:price,
-        time:time,
-        supplier:supplier,
-        score:score,
-        people:people,
-        type:type
-      }
-      data.push(dataOne);
-      data[0].isOK = true;
-      // console.log("携程的全部数据",data);
-      return data;
-    }
-  })
+  // 发送post请求
+  // console.log("携程的数据",res.text);
   
 }
