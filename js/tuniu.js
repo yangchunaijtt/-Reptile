@@ -2,7 +2,7 @@
  * 主要用于处理途牛获取到的数据
  */
 const cheerio = require('cheerio');
-const send = require("./send/send");    // 调用ajax的请求
+
 
 // 返回的数据
 let allElm = "";    // ajax获取到的所有数据
@@ -26,6 +26,7 @@ function tuniuHandle(res){
   let score = "";    // 评分/满意度
   let people = 0;    // 多少人出游
   let data = [{isOK:false}];    // 返回的data数据
+  let img = "";  //取img数据
   allElm = res;
   // console.log("途牛数据类型",typeof res);
   let $ = cheerio.load(res.text);
@@ -42,7 +43,8 @@ function tuniuHandle(res){
         supplier = $(ele).find(".tqs").find(".brand").find("span").text().trim();
         score    = $(ele).find(".comment-satNum").find("span").find("i").text()+"%".trim();
         people   = parseFloat($(ele).find(".trav-person").find(".person-num").find("i").text());
-    
+        img =  $(ele).find(".imgbox").find("img").attr("data-src");
+        // console.log($(ele).find(".imgbox").html());
         let dataOne = {
           name:name,
           price:price,
@@ -50,7 +52,8 @@ function tuniuHandle(res){
           supplier:supplier,
           score:score,
           people:people,
-          type:type
+          type:type,
+          img:img
         }
         data.push(dataOne);
         data[0].isOK = true;
@@ -58,7 +61,7 @@ function tuniuHandle(res){
   }else {
     data[0].isOK = false;
   }
-  
+  // console.log("途牛的数据",data);
   // console.log("途牛的全部数据",typeof data,data);
   return data;
 }

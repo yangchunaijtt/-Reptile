@@ -5,7 +5,7 @@
 
 
 const cheerio = require('cheerio');
-const send = require("./send/send");    // 调用ajax的请求
+
 
 // 返回的数据
 let allElm = "";    // ajax获取到的所有数据
@@ -29,6 +29,7 @@ function lvmama(res){
   let score = "";    // 评分/满意度
   let people = 0;    // 多少人出游
   let data = [{isOK:false}];    // 返回的data数据
+  let img = "";  //图片地址
   allElm = res;
   // console.log("驴妈妈数据类型",typeof res);
   let $ = cheerio.load(res.text);
@@ -42,23 +43,27 @@ function lvmama(res){
         name  = $(ele).find(".product-section").find(".product-title").find("span").text().trim(); // 
         price = parseFloat($(ele).find(".product-info").find(".product-price").find("em").text());
         time  = $(ele).find(".product-section").find(".product-details").find("em").text().trim();
+        img = $(ele).find(".product-left").find("img").attr("src");
         // supplier = "无供应商";
         // score    = $(ele).find(".comment-satNum").find("span").find("i").text()+"%".trim();
         // people   = parseFloat($(ele).find(".trav-person").find(".person-num").find("i").text());
-    
+
         let dataOne = {
           name:name,
           price:price,
           time:time,
-          type:type
+          type:type,
+          img:img,
         }
+        
         data.push(dataOne);
         data[0].isOK = true;
       });
+      
   }else {
     data[0].isOK = false;
   }
-  
+  //  console.log("驴妈妈的数据",data);
   // console.log("驴妈妈的全部数据",typeof data,data);
   return data;
 }

@@ -4,14 +4,19 @@
  * 比如：多种方式输入获取数据.
  * 最后得改成：提供一个接口给外面，外面调用那个接口，去取数据。
  * 目前查的主要是旅游
+ * 一：目前几个文件无需调用：
+ *  springtour.js,
+ *  ctrip.js
+ *  send.js
+ * 二：目前存在的问题：
+ *  1：携程调用数据问题
+ *  2：如何向上一层返回数据
  */
 // const tuniu = require("./js/tuniu");    //应用获取途牛的数据
-// const ctrip = require("./js/ctrip");   // 引用携程的数据
 const superagent = require('superagent');// 引入所需要的第三方包
 const request  = require("request");      // 引入node的request模块
 const cheerio = require('cheerio');
 
-const ctrip = require("./js/ctrip");
 const tuniu = require("./js/tuniu");
 const lvmama = require("./js/lvmama");
 const fliggy = require("./js/fliggy");
@@ -74,6 +79,9 @@ module.exports = {
     }else if ( trip == "sameWay") {
       // 调用同程
       send("sameWay",sameWayReq,frequency);
+    }else if ( trip == "springtour") {
+      // 调用常州春秋
+      send("springtour",sameWayReq,frequency);
     }else if ( trip == "all" ) {
       // 调用携程
       send("ctrip",ctripReq,frequency);
@@ -85,6 +93,8 @@ module.exports = {
       send("figgy",figgyReq,frequency);
       // 调用同程
       send("sameWay",sameWayReq,frequency);
+      // 调用常州春秋
+      send("springtour",sameWayReq,frequency);
     }
     //定时执行，5秒后执行
     var t1= setTimeout(returnClassData,3000);
@@ -164,14 +174,40 @@ function send(tips,req,frequency){
         let same_data = response.body.split("jQuery18303345215045856573_1563176873062")[1];
         let sameWayGetData = eval('(' + same_data + ')');
         // console.log(typeof sameWayGetData.ReturnValue.Records,sameWayGetData.ReturnValue.Records[0]);
-        indexData[0].isOK =true;
-        indexData[0].num ++;
-        indexData.push({"sameWay":sameWayGetData.ReturnValue.Records[0]});
         
-        //  console.log("同程取数据",sameWayGetData.ReturnValue.Records[0]);
+         let  sameWay_join = [{
+           isOK:false
+         }]
+         let sameWay_push = {};
+        //  console.log("同程取数据",sameWayGetData.ReturnValue.Records[0],"=====");
+         if ( null == sameWayGetData.ReturnValue.Records[0]) {
+            sameWay_join[0].isOK = false;
+         } else {
+          sameWay_join[0].isOK = true ;
+          sameWay_push = {
+            name:sameWayGetData.ReturnValue.Records[0].Title,
+            price:sameWayGetData.ReturnValue.Records[0].Price/100,
+            type:sameWayGetData.ReturnValue.Records[0].InnerTypeName,
+            img:sameWayGetData.ReturnValue.Records[0].Picture,
+            otherNode:""
+          }
+          sameWay_join.push(sameWay_push);
+          indexData[0].isOK =true;
+          indexData[0].num ++;
+          indexData.push({"sameWay":sameWay_join});
+          // console.log("同程获取到的数据",sameWay_join,"===");
+         }
+        //  console.log("同程获取到的数据",sameWay_join,"===");
       }
     });
 
+  }else if ( tips == "springtour" ) {
+    /**
+     * 常州春秋调用示例：
+     * 1：杭州西湖：http://www.springtour.com/changzhou-%E6%9D%AD%E5%B7%9E%E8%A5%BF%E6%B9%96
+     * 2：长城一日游：http://www.springtour.com/changzhou-%E9%95%BF%E5%9F%8E%E4%B8%80%E6%97%A5%E6%B8%B8
+     */
+    url = "http://www.springtour.com/changzhou-"+req;
   }
   
   // 调用发送的ajax
@@ -182,6 +218,7 @@ function send(tips,req,frequency){
       // 访问成功，请求http://news.baidu.com/页面所返回的数据会包含在res
       let resTrips = "" ;
       if ( tips == "ctrip" ) {
+       
         let tripJsonArr = {
           data:""
         };
@@ -194,9 +231,16 @@ function send(tips,req,frequency){
         // indexData[0].isOK =true;
         // indexData[0].num ++;
         let $ = cheerio.load(res.text);
+        // 发送进入的数据
+        let ctrip_join = [{
+          isOK:false
+        }]
         // console.log("携程的res",res);
         if ( $('body').find("textarea") ) {
+          
           $('body').find("textarea").each((idx,ele) => {
+            // 这里报错了
+            console.log("22");
             // console.log("携程的ele",typeof $(ele).text(),typeof JSON.parse($(ele).text()),JSON.parse($(ele).text()), JSON.parse($(ele).text()).Id );
             if ( null != JSON.parse($(ele).text()).Id  ){
               if ( tripJsonArr.data == ""){
@@ -214,14 +258,23 @@ function send(tips,req,frequency){
                     //  console.log(body) // 请求成功的处理逻辑  
                      indexData[0].isOK =true;
                      indexData[0].num ++;
-                     indexData.push({"ctrip":JSON.parse(body)});
+                     ctrip_join[0].isOK = true;
+                     ctrip_join.push(JSON.parse(body));
+                     indexData.push({"ctrip":ctrip_join});
+                     console.log("首页indexData",indexData);
                   }
                 })
                 
               }
             }
           })
+        }else {
+          
+          ctrip_join[0].isOK = false;
+          indexData.push({"ctrip":ctrip_join});
+          console.log("首页indexData",indexData);
         }
+       
       }else if ( tips == "tuniu" ) {
         resTrips = "途牛抓取成功";
 
@@ -249,6 +302,62 @@ function send(tips,req,frequency){
         indexData[0].isOK = true;
         indexData[0].num ++;
        
+      }else if (  tips == "springtour"  ) {
+        // 调用
+        resTrips = "常州春秋抓取成功";
+        indexData[0].num ++;
+        indexData[0].isOK =true;
+        // data = springtour.handele(res);
+        // 常州春秋的参数
+        
+        let springtour_postjson = {
+          data: {groupedQuery: {}, keywords: decodeURI(req), startCity: "常州"},
+          springsign: "5E6961CA28DD9275948BC7EF5BC7AD60F4F535A8"
+        };
+        // console.log("",springtour_postjson);
+          request({
+            url: "http://www.springtour.com/w/search/query",
+            method: "POST",
+            json: true,                                                                                                                                                                                                                                                                                                                                                                
+            headers: {
+                "content-type": "application/json",
+            },
+            body:springtour_postjson
+          }, function(error, response,body) {
+            
+            if (!error && response.statusCode == 200) {
+            // console.log("常州春秋xxx",JSON.parse(body));
+            // console.log("常州春秋xxxxx",typeof body,body.search) // 请求成功的处理逻辑
+              data = body;
+              // indexData.push({"springtour":data.search});
+              // if(indexData[0].num >= 5){
+              //   console.log("首页indexData222222",indexData);
+              // }
+              let springtour_join = [{isOK:false}];
+              if ( null == data.search.data[0] ) {
+                springtour_join[0].isOK = false;
+              }else {
+                springtour_join[0].isOK = true;
+                let timeArr = [];
+                for (var index in data.search.data[0].schedule.datePrices){
+                    timeArr.push(data.search.data[0].schedule.datePrices[index].date);
+                }
+                springtour_join.push({
+                  name:data.search.data[0].name,
+                  price:data.search.data[0].schedule.minPrice,
+                  type:data.search.data[0].attributeName,
+                  supplier:data.search.data[0].supplierName,
+                  img:data.search.data[0].picture,
+                  time:timeArr,
+                  otherNede:data.search.data[0].schedule
+                });
+                indexData.push({"springtour":springtour_join});
+                // console.log("常州春秋传入的数据",springtour_join);
+              } 
+              // console.log("常州春秋传入的数据",springtour_join);
+            }
+        }); 
+        
       }else if ( tips == "new"){
         // 赋值为初始化的方法
         indexData = [
@@ -256,12 +365,12 @@ function send(tips,req,frequency){
         ];
       }
 
-      if(indexData[0].num == 5){
-        console.log("首页indexData222222",indexData);
-      }
+      // if(indexData[0].num >= 5){
+      //   console.log("首页indexData222222",indexData);
+      // }
       // console.log("首页indexData",indexData);
       return indexData;
     }
   });
 }
-
+// 价格，名称，时间 ，类型。

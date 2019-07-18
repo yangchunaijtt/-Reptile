@@ -5,7 +5,7 @@
 
 
 const cheerio = require('cheerio');
-const send = require("./send/send");    // 调用ajax的请求
+
 
 // 返回的数据
 let allElm = "";    // ajax获取到的所有数据
@@ -28,6 +28,7 @@ function fliggyHandle(res){
   let supplier = ""; //供应商
   let score = "";    // 评分/满意度
   let people = 0;    // 多少人出游
+  let img = "";  // 图片地址
   let data = [{isOK:false}];    // 返回的data数据
   allElm = res;
   // console.log("飞猪数据类型",typeof res);
@@ -46,12 +47,14 @@ function fliggyHandle(res){
         // supplier = $(ele).find(".tqs").find(".brand").find("span").text().trim();
        
         people   = $(ele).find(".product-middle").find(".rate-msg").children("span").first().text().trim();
-    
+        
+        img =  $(ele).find(".product-left").find(".main-img").find("img").attr("data-src");
         let dataOne = {
           name:name,
           price:price,
           people:people,
-          type:type
+          type:type,
+          img:img,
         }
         data.push(dataOne);
         data[0].isOK = true;
@@ -59,7 +62,6 @@ function fliggyHandle(res){
   }else {
     data[0].isOK = false;
   }
-  
   // console.log("飞猪的全部数据",typeof data,data);
   return data;
 }

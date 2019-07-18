@@ -9,7 +9,7 @@
 
 
 const cheerio = require('cheerio');
-const send = require("./send/send");    // 调用ajax的请求
+
 const superagent = require('superagent');// 引入所需要的第三方包
 const request  = require("request");      // 引入node的request模块
 
