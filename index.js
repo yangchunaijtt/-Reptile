@@ -16,6 +16,8 @@
 const superagent = require('superagent');// 引入所需要的第三方包
 const request  = require("request");      // 引入node的request模块
 const cheerio = require('cheerio');
+const express = require('express');//引入express 
+
 
 const tuniu = require("./js/tuniu");
 const lvmama = require("./js/lvmama");
@@ -27,10 +29,10 @@ const  callJs = require("./call");
 //返回的数据
 let data = [];
 let tuniuReq = "西湖";  //输入给途牛的查询数据
-let ctripReq = "伊犁、北疆禾木、克拉玛伊、乌鲁木齐、吐鲁番双卧十三日游+南疆喀什、西安十八日游";  //输入给携程的查询数据
+let ctripReq = "丽水";  //输入给携程的查询数据
 let lvmamaReq = "西湖"; // 输入给驴妈妈的查询数据
 let figgyReq = "西湖";  // 输入给飞猪的查询数据
-let sameWayReq = "长城";  //输入给同程旅游的查询数据
+let sameWayReq = "长城";  // 输入给同程旅游的查询数据
 // 返回给首页的数据
 let indexData = [
   {isOK:false,num:0}
@@ -41,8 +43,27 @@ let superagentFrequency  = 5; // 需要ajax的次数
 // 得用classback返回下数据
 // callHandel("all","西湖",true);
 // 发送post请求
+
+/**
+ * 本地服务部分代码
+ */
+const app = express();// 初始化
+//配置服务端口
+
+var server = app.listen(8090, () => {
+  console.log( '服务器启动:localhost:8090');
+});
+//发送给页面请求
+app.get("/", (req, res) => {
+
+  res.send(indexData);
+
+});
   
 
+/**
+ * 公用的模块部分
+ */
 module.exports = {
   indexData: [
     {isOK:false,num:0}
@@ -64,7 +85,7 @@ module.exports = {
     // 判断要调用那个网站数据
     if ( null == trip || trip == "" ) {
       let trip = "all";
-    }else if ( trip == "tuniu" ){
+    }else if ( trip == "tuniu" ){ 
       // 调用途牛
       send("tuniu",tuniuReq,frequency);
     } else if ( trip == "ctrip") {
@@ -235,12 +256,13 @@ function send(tips,req,frequency){
         let ctrip_join = [{
           isOK:false
         }]
+        let ctrip_push = {};  // 存入进去的数据
         // console.log("携程的res",res);
         if ( $('body').find("textarea") ) {
           
           $('body').find("textarea").each((idx,ele) => {
             // 这里报错了
-            console.log("22");
+            // console.log("22");
             // console.log("携程的ele",typeof $(ele).text(),typeof JSON.parse($(ele).text()),JSON.parse($(ele).text()), JSON.parse($(ele).text()).Id );
             if ( null != JSON.parse($(ele).text()).Id  ){
               if ( tripJsonArr.data == ""){
@@ -255,13 +277,24 @@ function send(tips,req,frequency){
                 // request.post();
                 request.post({url:'https://vacations.ctrip.com/tour-mainsite-vacations/api/product', form:trips_paramsjson}, function(error, response, body) {
                   if (!error && response.statusCode == 200) {
-                    //  console.log(body) // 请求成功的处理逻辑  
+                    let ctrip_bodyjson =  JSON.parse(body)[0];
+                    // console.log("携程获取到的数据",ctrip_bodyjson);
+                    //  console.log(JSON.parse(body)) // 请求成功的处理逻辑  
                      indexData[0].isOK =true;
                      indexData[0].num ++;
                      ctrip_join[0].isOK = true;
-                     ctrip_join.push(JSON.parse(body));
+                     ctrip_push = {
+                      type:ctrip_bodyjson.Remarks,
+                      name:ctrip_bodyjson.ProName,
+                      img:ctrip_bodyjson.ImageUrl,
+                      price:ctrip_bodyjson.Price,
+                      supplier:ctrip_bodyjson.VendorName,
+                      time:ctrip_bodyjson.ScheduleDesc,
+                      // otherNede:JSON.parse(body),
+                     };
+                     ctrip_join.push(ctrip_push);
                      indexData.push({"ctrip":ctrip_join});
-                     console.log("首页indexData",indexData);
+                    //  console.log("首页indexData1111",indexData);
                   }
                 })
                 
@@ -272,7 +305,7 @@ function send(tips,req,frequency){
           
           ctrip_join[0].isOK = false;
           indexData.push({"ctrip":ctrip_join});
-          console.log("首页indexData",indexData);
+          
         }
        
       }else if ( tips == "tuniu" ) {
@@ -352,7 +385,7 @@ function send(tips,req,frequency){
                   otherNede:data.search.data[0].schedule
                 });
                 indexData.push({"springtour":springtour_join});
-                // console.log("常州春秋传入的数据",springtour_join);
+                // console.log("常州春秋传入的数据",indexData);
               } 
               // console.log("常州春秋传入的数据",springtour_join);
             }
@@ -365,12 +398,13 @@ function send(tips,req,frequency){
         ];
       }
 
-      // if(indexData[0].num >= 5){
+      // if(indexData[0].num >= 6){
       //   console.log("首页indexData222222",indexData);
       // }
-      // console.log("首页indexData",indexData);
+      // console.log("首页indexData22222",indexData);
       return indexData;
     }
   });
 }
 // 价格，名称，时间 ，类型。
+
