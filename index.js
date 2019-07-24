@@ -28,11 +28,11 @@ const  callJs = require("./call");
 
 //返回的数据
 let data = [];
-let tuniuReq = "西湖";  //输入给途牛的查询数据
-let ctripReq = "丽水";  //输入给携程的查询数据
-let lvmamaReq = "西湖"; // 输入给驴妈妈的查询数据
-let figgyReq = "西湖";  // 输入给飞猪的查询数据
-let sameWayReq = "长城";  // 输入给同程旅游的查询数据
+let tuniuReq = "";  //输入给途牛的查询数据
+let ctripReq = "";  //输入给携程的查询数据
+let lvmamaReq = ""; // 输入给驴妈妈的查询数据
+let figgyReq = "";  // 输入给飞猪的查询数据
+let sameWayReq = "";  // 输入给同程旅游的查询数据
 // 返回给首页的数据
 let indexData = [
   {isOK:false,num:0}
@@ -45,6 +45,7 @@ let superagentFrequency  = 5; // 需要ajax的次数
 // 发送post请求
 
 /**
+ * 
  * 本地服务部分代码
  */
 const app = express();// 初始化
@@ -290,7 +291,7 @@ function send(tips,req,frequency){
                       price:ctrip_bodyjson.Price,
                       supplier:ctrip_bodyjson.VendorName,
                       time:ctrip_bodyjson.ScheduleDesc,
-                      // otherNede:JSON.parse(body),
+                      otherNede:ctrip_bodyjson.Districts,
                      };
                      ctrip_join.push(ctrip_push);
                      indexData.push({"ctrip":ctrip_join});

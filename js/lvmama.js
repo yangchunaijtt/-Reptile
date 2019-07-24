@@ -8,7 +8,7 @@ const cheerio = require('cheerio');
 
 
 // 返回的数据
-let allElm = "";    // ajax获取到的所有数据
+let allElm = "";      // ajax获取到的所有数据
 let lvmamaData = []; // 返回首页的数据
 
 
