@@ -30,7 +30,7 @@ module.exports = {
       let people = 0;    // 多少人出游
       let data = [{isOK:false}];    // 返回的data数据
       allElm = res;
-      // console.log("同程数据类型",typeof res);
+      
       let $ = cheerio.load(res.text);
       console.log("同程的req2",encodeURI(req));
       url= "https://so.ly.com/commonAjax/AjaxHandler/GetSearchResult?sourceType=pc&searchType=1000&callback=jQuery18303345215045856573_1563176873062&keyword="+encodeURI(req)+"&startCityId=221&isStat=0&selectType=&selectSourceType=0&isTab=1&projectType=0&cityname=%E5%B8%B8%E5%B7%9E&fchannel=&fpagetype=";
@@ -54,7 +54,7 @@ module.exports = {
       if (!error && response.statusCode == 200) {
           data[0].isOK = true;
           data.push(response.body);
-        //  console.log("同程取数据",typeof data,data);
+       
         return data;
       }else{
         data[0].isOK = false;

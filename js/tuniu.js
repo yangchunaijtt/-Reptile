@@ -25,7 +25,7 @@ function tuniuHandle(res){
   let supplier = ""; //供应商
   let score = "";    // 评分/满意度
   let people = 0;    // 多少人出游
-  let data = [{isOK:false}];    // 返回的data数据
+  let data = {};    // 返回的data数据
   let img = "";  //取img数据
   allElm = res;
   // console.log("途牛数据类型",typeof res);
@@ -45,23 +45,27 @@ function tuniuHandle(res){
         people   = parseFloat($(ele).find(".trav-person").find(".person-num").find("i").text());
         img =  $(ele).find(".imgbox").find("img").attr("data-src");
         // console.log($(ele).find(".imgbox").html());
-        let dataOne = {
-          name:name,
-          price:price,
-          time:time,
-          supplier:supplier,
-          score:score,
-          people:people,
-          type:type,
-          img:img
+        data = {
+          company:"tuniu",
+          push:[
+            {
+              name:name,
+              price:price,
+              time:time,
+              // supplier:supplier,
+              // score:score,
+              // people:people,
+              type:type,
+              img:img
+            }
+          ]
+          
         }
-        data.push(dataOne);
-        data[0].isOK = true;
+       
       });
   }else {
-    data[0].isOK = false;
+    // data[0].isOK = false;
   }
-  // console.log("途牛的数据",data);
-  // console.log("途牛的全部数据",typeof data,data);
+  
   return data;
 }

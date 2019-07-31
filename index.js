@@ -34,9 +34,8 @@ let lvmamaReq = ""; // 输入给驴妈妈的查询数据
 let figgyReq = "";  // 输入给飞猪的查询数据
 let sameWayReq = "";  // 输入给同程旅游的查询数据
 // 返回给首页的数据
-let indexData = [
-  {isOK:false,num:0}
-];   //返回给首页的数据
+let indexData = [];   //返回给首页的数据
+let creditData = [];  // 百度信用查询到的数据
 let superagentFrequency  = 5; // 需要ajax的次数
 
 // 调用
@@ -52,7 +51,7 @@ const app = express();// 初始化
 //配置服务端口
 
 var server = app.listen(8090, () => {
-  console.log( '服务器启动:localhost:8090');
+  console.log( '服务器启动:http://192.168.1.7:8090');
 });
 //发送给页面请求
 app.get("/", (req, res) => {
@@ -60,16 +59,29 @@ app.get("/", (req, res) => {
   res.send(indexData);
 
 });
-  
+
+// 企业信用查的路由
+
+app.get("/credit", (req,res) => {
+    
+    res.send(creditData);
+
+});
+
 
 /**
  * 公用的模块部分
  */
 module.exports = {
-  indexData: [
-    {isOK:false,num:0}
-  ],
-  reptile(trip,name,frequency){  // 给外界提供一个调用的接口 frequency:次数是否为五次，还是单词。
+  query(req){
+    creditQuery(req);
+    //定时执行，3秒后执行
+    var t1= setTimeout(returnCredit,3000);
+    //去掉定时器的方法  
+    clearTimeout(t1); 
+    
+  },
+  reptile(trip,name){  // 给外界提供一个调用的接口 frequency:次数是否为五次，还是单词。
     let data = [];
     // 提供一个输入的地方，后面需要判断
       if (null == name){
@@ -88,35 +100,35 @@ module.exports = {
       let trip = "all";
     }else if ( trip == "tuniu" ){ 
       // 调用途牛
-      send("tuniu",tuniuReq,frequency);
+      send("tuniu",tuniuReq);
     } else if ( trip == "ctrip") {
       // 调用携程
-      send("ctrip",ctripReq,frequency);
+      send("ctrip",ctripReq);
     }else if ( trip == "lvmama") {
       // 调用驴妈妈
-      send("lvmama",lvmamaReq,frequency);
+      send("lvmama",lvmamaReq);
     }else if ( trip == "figgy") {
       // 调用飞猪
-      send("figgy",figgyReq,frequency);
+      send("figgy",figgyReq);
     }else if ( trip == "sameWay") {
       // 调用同程
-      send("sameWay",sameWayReq,frequency);
+      send("sameWay",sameWayReq);
     }else if ( trip == "springtour") {
       // 调用常州春秋
-      send("springtour",sameWayReq,frequency);
+      send("springtour",sameWayReq);
     }else if ( trip == "all" ) {
       // 调用携程
-      send("ctrip",ctripReq,frequency);
+      send("ctrip",ctripReq);
       // 调用途牛
-      send("tuniu",tuniuReq,frequency);
+      send("tuniu",tuniuReq);
        // 调用驴妈妈
-      send("lvmama",lvmamaReq,frequency);
+      send("lvmama",lvmamaReq);
        // 调用飞猪
-      send("figgy",figgyReq,frequency);
+      send("figgy",figgyReq);
       // 调用同程
-      send("sameWay",sameWayReq,frequency);
+      send("sameWay",sameWayReq);
       // 调用常州春秋
-      send("springtour",sameWayReq,frequency);
+      send("springtour",sameWayReq);
     }
     //定时执行，5秒后执行
     var t1= setTimeout(returnClassData,3000);
@@ -129,13 +141,16 @@ function returnClassData (){
   return indexData;
 }
 
+function returnCredit(){
+  return creditData;
+}
 
 /**
  * 封装发送请求的
  * 后面还得继续检测下用户的输入，如果不是中文的情况和其他情况。
  */
 
-function send(tips,req,frequency){
+function send(tips,req){
   req = encodeURI(req); // 把中文转成UrlEncode编码
   let url = "";         // 请求的地址
   if ( tips == "ctrip" ) {
@@ -195,31 +210,30 @@ function send(tips,req,frequency){
         
         let same_data = response.body.split("jQuery18303345215045856573_1563176873062")[1];
         let sameWayGetData = eval('(' + same_data + ')');
-        // console.log(typeof sameWayGetData.ReturnValue.Records,sameWayGetData.ReturnValue.Records[0]);
-        
-         let  sameWay_join = [{
-           isOK:false
-         }]
+       
          let sameWay_push = {};
-        //  console.log("同程取数据",sameWayGetData.ReturnValue.Records[0],"=====");
+       
          if ( null == sameWayGetData.ReturnValue.Records[0]) {
-            sameWay_join[0].isOK = false;
+           
          } else {
-          sameWay_join[0].isOK = true ;
+          
           sameWay_push = {
-            name:sameWayGetData.ReturnValue.Records[0].Title,
-            price:sameWayGetData.ReturnValue.Records[0].Price/100,
-            type:sameWayGetData.ReturnValue.Records[0].InnerTypeName,
-            img:sameWayGetData.ReturnValue.Records[0].Picture,
-            otherNode:""
+            company:"sameWay",
+            push:[
+              {
+                name:sameWayGetData.ReturnValue.Records[0].Title,
+                price:sameWayGetData.ReturnValue.Records[0].Price/100,
+                type:sameWayGetData.ReturnValue.Records[0].InnerTypeName,
+                img:sameWayGetData.ReturnValue.Records[0].Picture,
+                time:""
+              }
+            ]
           }
-          sameWay_join.push(sameWay_push);
-          indexData[0].isOK =true;
-          indexData[0].num ++;
-          indexData.push({"sameWay":sameWay_join});
-          // console.log("同程获取到的数据",sameWay_join,"===");
+    
+          indexData.push(sameWay_push);
+          
          }
-        //  console.log("同程获取到的数据",sameWay_join,"===");
+        
       }
     });
 
@@ -233,7 +247,7 @@ function send(tips,req,frequency){
   }
   
   // 调用发送的ajax
-  // console.log("url",url,tips);
+
   let data;
   superagent.get(url).end((err,res) => {
     if (!err)  {
@@ -247,24 +261,16 @@ function send(tips,req,frequency){
         
         
         resTrips = "携程抓取成功";
-        // ctripHadle(res,req);
-        // data = ctrip.handle(res,req);
-        // indexData.push({"ctrip":data});
-        // indexData[0].isOK =true;
-        // indexData[0].num ++;
+        
         let $ = cheerio.load(res.text);
         // 发送进入的数据
-        let ctrip_join = [{
-          isOK:false
-        }]
-        let ctrip_push = {};  // 存入进去的数据
-        // console.log("携程的res",res);
+       
+       
         if ( $('body').find("textarea") ) {
           
           $('body').find("textarea").each((idx,ele) => {
             // 这里报错了
-            // console.log("22");
-            // console.log("携程的ele",typeof $(ele).text(),typeof JSON.parse($(ele).text()),JSON.parse($(ele).text()), JSON.parse($(ele).text()).Id );
+           
             if ( null != JSON.parse($(ele).text()).Id  ){
               if ( tripJsonArr.data == ""){
                 tripJsonArr.data = JSON.parse($(ele).text());
@@ -273,28 +279,27 @@ function send(tips,req,frequency){
                   //"params":'[{"Id":22110880,"Bu":"GT","Did":213}]'
                   //"keyword":encodeURI(tripJsonArr.data.Name) 
                 };
-                // console.log(tripJsonArr.data,"=========",trips_paramsjson);
-                // request.post()
-                // request.post();
+                
                 request.post({url:'https://vacations.ctrip.com/tour-mainsite-vacations/api/product', form:trips_paramsjson}, function(error, response, body) {
                   if (!error && response.statusCode == 200) {
                     let ctrip_bodyjson =  JSON.parse(body)[0];
-                    // console.log("携程获取到的数据",ctrip_bodyjson);
-                    //  console.log(JSON.parse(body)) // 请求成功的处理逻辑  
-                     indexData[0].isOK =true;
-                     indexData[0].num ++;
-                     ctrip_join[0].isOK = true;
-                     ctrip_push = {
-                      type:ctrip_bodyjson.Remarks,
-                      name:ctrip_bodyjson.ProName,
-                      img:ctrip_bodyjson.ImageUrl,
-                      price:ctrip_bodyjson.Price,
-                      supplier:ctrip_bodyjson.VendorName,
-                      time:ctrip_bodyjson.ScheduleDesc,
-                      otherNede:ctrip_bodyjson.Districts,
+                    
+                     
+                     let ctrip_push = {
+                      company:"ctrip",
+                      push:[
+                        {
+                          type:ctrip_bodyjson.Remarks[0]?ctrip_bodyjson.Remarks[0]:"",
+                          name:ctrip_bodyjson.ProName,
+                          img:ctrip_bodyjson.ImageUrl,
+                          price:ctrip_bodyjson.Price?parseFloat(ctrip_bodyjson.Price.split("<strong>")[1].split("</strong>")[0]):"",
+                          // supplier:ctrip_bodyjson.VendorName,
+                          time:ctrip_bodyjson.ScheduleDesc,
+                        }
+                      ]
                      };
-                     ctrip_join.push(ctrip_push);
-                     indexData.push({"ctrip":ctrip_join});
+                     
+                     indexData.push(ctrip_push);
                     //  console.log("首页indexData1111",indexData);
                   }
                 })
@@ -302,29 +307,22 @@ function send(tips,req,frequency){
               }
             }
           })
-        }else {
-          
-          ctrip_join[0].isOK = false;
-          indexData.push({"ctrip":ctrip_join});
-          
         }
        
       }else if ( tips == "tuniu" ) {
         resTrips = "途牛抓取成功";
 
         data = tuniu.handele(res);
-        indexData.push({"tuniu":data});
-        indexData[0].isOK =true;
-        indexData[0].num ++;
+        indexData.push(data);
+        
        
       }else if ( tips == "lvmama" ) {
         
         resTrips = "驴妈妈抓取成功";
         data = lvmama.handele(res);
         
-        indexData.push({"lvmama":data});
-        indexData[0].isOK =true;
-        indexData[0].num ++;
+        indexData.push(data);
+       
         
 
       }else if ( tips == "figgy" ) {
@@ -332,15 +330,13 @@ function send(tips,req,frequency){
         resTrips = "飞猪抓取成功";
         data = fliggy.handele(res);
                   
-        indexData.push({"figgy":data});
-        indexData[0].isOK = true;
-        indexData[0].num ++;
+        indexData.push(data);
+       
        
       }else if (  tips == "springtour"  ) {
         // 调用
         resTrips = "常州春秋抓取成功";
-        indexData[0].num ++;
-        indexData[0].isOK =true;
+        
         // data = springtour.handele(res);
         // 常州春秋的参数
         
@@ -360,43 +356,41 @@ function send(tips,req,frequency){
           }, function(error, response,body) {
             
             if (!error && response.statusCode == 200) {
-            // console.log("常州春秋xxx",JSON.parse(body));
-            // console.log("常州春秋xxxxx",typeof body,body.search) // 请求成功的处理逻辑
+          
               data = body;
-              // indexData.push({"springtour":data.search});
-              // if(indexData[0].num >= 5){
-              //   console.log("首页indexData222222",indexData);
-              // }
+              
               let springtour_join = [{isOK:false}];
               if ( null == data.search.data[0] ) {
                 springtour_join[0].isOK = false;
               }else {
                 springtour_join[0].isOK = true;
-                let timeArr = [];
+                let timeArr = "";
                 for (var index in data.search.data[0].schedule.datePrices){
-                    timeArr.push(data.search.data[0].schedule.datePrices[index].date);
+                    timeArr +=data.search.data[0].schedule.datePrices[index].date+",";
                 }
-                springtour_join.push({
-                  name:data.search.data[0].name,
-                  price:data.search.data[0].schedule.minPrice,
-                  type:data.search.data[0].attributeName,
-                  supplier:data.search.data[0].supplierName,
-                  img:data.search.data[0].picture,
-                  time:timeArr,
-                  otherNede:data.search.data[0].schedule
-                });
-                indexData.push({"springtour":springtour_join});
-                // console.log("常州春秋传入的数据",indexData);
+                let springtour_push = {
+                  company:"springtour",
+                  push:[
+                    {
+                      name:data.search.data[0].name,
+                      price:data.search.data[0].schedule.minPrice,
+                      type:data.search.data[0].attributeName,
+                      // supplier:data.search.data[0].supplierName,
+                      img:data.search.data[0].picture,
+                      time:timeArr
+                    }
+                  ]
+                };
+                indexData.push(springtour_push);
+              
               } 
-              // console.log("常州春秋传入的数据",springtour_join);
+              
             }
         }); 
         
       }else if ( tips == "new"){
         // 赋值为初始化的方法
-        indexData = [
-          {isOK:false,num:0}
-        ];
+        indexData = [];
       }
 
       // if(indexData[0].num >= 6){
@@ -409,3 +403,54 @@ function send(tips,req,frequency){
 }
 // 价格，名称，时间 ，类型。
 
+
+
+// 查百度企业信用
+
+function creditQuery(req){
+  let data = {};  //存储数据的地方
+  let url = "";
+  let dataUrl = "";
+  let basicUrl = "";
+  /**
+   * 百度信用举例：
+   * 1：扬州德道宾馆有限公司
+   * https://xin.baidu.com/s?q=%E6%89%AC%E5%B7%9E%E5%BE%B7%E9%81%93%E5%AE%BE%E9%A6%86%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8&t=0
+   * https://xin.baidu.com/detail/compinfo?pid=xlTM-TogKuTwbiofkxxvE5-I*q5KYXK17Qmd
+   */
+   url = "https://xin.baidu.com/s?q="+encodeURI(req)+"&t=0";
+  superagent.get(url).end( (err,res) => {
+    
+      if (!err){
+        
+        let $ = cheerio.load(res.text);
+        
+          if ( $('body').find(".zx-list-item") ) {
+            $('body').find(".zx-list-item").find(".zx-list-item-url").each( (idx,ele) => {
+              ///detail/compinfo?pid=xlTM-TogKuTwbiofkxxvE5-I*q5KYXK17Qmd
+              // https://xin.baidu.com/detail/compinfo?pid=xlTM-TogKuTwbiofkxxvE5-I*q5KYXK17Qmd
+              dataUrl = "https://xin.baidu.com/" + $(ele).attr("href");
+              basicUrl ="https://xin.baidu.com/detail/basicAjax?pid="+ $(ele).attr("href").split("pid=")[1]
+              
+              if (req == $(ele).attr("title")){
+                
+                request(basicUrl, function (error, response,body){
+                  if (!error && response.statusCode == 200){  
+                    data = JSON.parse(response.body).data;
+                  
+                    creditData = {
+                      legalPerson:data.legalPerson,
+                      taxNo:data.taxNo===""?data.regNo:data.taxNo,
+                      licenseNumber:data.licenseNumber,
+                      regAddr:data.regAddr,
+                    }
+                  }
+                })
+              }
+              
+            })
+          }
+    }
+    
+  })
+}
