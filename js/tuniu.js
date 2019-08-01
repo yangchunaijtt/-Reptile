@@ -46,7 +46,7 @@ function tuniuHandle(res){
         img =  $(ele).find(".imgbox").find("img").attr("data-src");
         // console.log($(ele).find(".imgbox").html());
         data = {
-          company:"tuniu",
+          company:"途牛",
           push:[
             {
               name:name,

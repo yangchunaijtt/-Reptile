@@ -49,7 +49,7 @@ function fliggyHandle(res){
         
         img =  $(ele).find(".product-left").find(".main-img").find("img").attr("data-src");
         data = {
-          company:"figgy",
+          company:"飞猪",
           push:[
             {
               name:name,
@@ -62,8 +62,6 @@ function fliggyHandle(res){
           ]
           
         }
-        
-        
       });
   }
   

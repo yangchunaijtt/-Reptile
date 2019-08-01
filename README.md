@@ -8,21 +8,10 @@
 ```
 
 # 引用
-1：引入我的index.js文件
-```
-  const reptile = require("reptile")
-```
-2:index.js文件夹中提供了目前只提供了一个方法：reptile(name,trip);
-(1):name:输入要查询的名称(例：上海，长城)，可为空，默认为空。
-```
-  reptile.reptile("上海","");
-```
-(2):trip:输入要爬那几个网站的数据：(目前有：途牛，携程。)(可以输入四个参数："","tuniu","ctrip","all"),默认为"all"。
-"tuniu",
-"ctrip",
-
-"all",
-```
-  reptile.reptile("","all");
-```
+  通过路由url传值
+  例
+  ```
+   http://localhost:8090/?name=%E9%95%BF%E5%9F%8E
+   http://localhost:8090/credit?name=%E6%89%AC%E5%B7%9E%E5%A4%A7%E5%AD%A6
+  ```
 

@@ -48,7 +48,7 @@ function lvmama(res){
         
 
         data = {
-          company:"lvmama",
+          company:"驴妈妈",
           push:[
             {
               name:name,
