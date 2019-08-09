@@ -27,8 +27,11 @@ function creditQuery(req,fun){
     if (!err){
         
         let $ = cheerio.load(res.text);
-        
-          if ( $('body').find(".zx-list-item") ) {
+          if ( false == $('body').find(".zx-list-item") || false ==$('body').find(".zx-list-item").find(".zx-list-item-url") ){
+           
+              fun(creditData);
+            
+          }else if ( $('body').find(".zx-list-item").find(".zx-list-item-url") ) {
             $('body').find(".zx-list-item").find(".zx-list-item-url").first().each( (idx,ele) => {
               ///detail/compinfo?pid=xlTM-TogKuTwbiofkxxvE5-I*q5KYXK17Qmd
               // https://xin.baidu.com/detail/compinfo?pid=xlTM-TogKuTwbiofkxxvE5-I*q5KYXK17Qmd
@@ -53,8 +56,6 @@ function creditQuery(req,fun){
                 fun(creditData);
               }
             })
-          }else {
-            fun(creditData);
           }
     }else {
       fun(creditData);

@@ -22,10 +22,11 @@ let indexData = {
   list:[]
 };   //返回给首页的数据
 let creditData = [];  // 百度信用查询到的数据
-let superagentFrequency  = 5; // 需要ajax的次数
+let superagentFrequency  = 6; // 需要ajax的次数
 
 
 // 执行爬几个旅游网站数据
+
 
 function reptile(trip,name,fun){  // 给外界提供一个调用的接口 frequency:次数是否为五次，还是单词。
   let data = [];
@@ -43,28 +44,7 @@ function reptile(trip,name,fun){  // 给外界提供一个调用的接口 freque
     sameWayReq =  name;
 
 
-  // 判断要调用那个网站数据
-  // if ( null == trip || trip == "" ) {
-  //   let trip = "all";
-  // }else if ( trip == "tuniu" ){ 
-  //   // 调用途牛
-  //   send("tuniu",tuniuReq);
-  // } else if ( trip == "ctrip") {
-  //   // 调用携程
-  //   send("ctrip",ctripReq);
-  // }else if ( trip == "lvmama") {
-  //   // 调用驴妈妈
-  //   send("lvmama",lvmamaReq);
-  // }else if ( trip == "figgy") {
-  //   // 调用飞猪
-  //   send("figgy",figgyReq);
-  // }else if ( trip == "sameWay") {
-  //   // 调用同程
-  //   send("sameWay",sameWayReq);
-  // }else if ( trip == "springtour") {
-  //   // 调用常州春秋
-  //   send("springtour",sameWayReq);
-  // }else 
+
   if ( trip == "all" ) {
     // 调用携程
     send("ctrip",ctripReq,fun);
@@ -93,6 +73,7 @@ function errreptile(fun){
 function send(tips,req,fun){
   req = encodeURI(req); // 把中文转成UrlEncode编码
   let url = "";         // 请求的地址
+  console.log(tips);
   if ( tips == "ctrip" ) {
     // 携程调用了
     /**
@@ -174,6 +155,8 @@ function send(tips,req,fun){
           
          }
         
+      }else {
+
       }
     });
 
@@ -246,7 +229,7 @@ function send(tips,req,fun){
                         }
                       ]
                      };
-                     console.log("携程数据",ctrip_bodyjson.Price);
+                    //  console.log("携程数据",ctrip_bodyjson.Price);
                      indexData.list.push(ctrip_push);
                     //  console.log("首页indexData1111",indexData);
                   }

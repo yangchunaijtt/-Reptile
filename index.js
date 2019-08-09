@@ -20,6 +20,7 @@ const credit = require("./js/credit");
 const vice = require("./vice");
 
 
+
 // 调用
 // 得用classback返回下数据
 // callHandel("all","西湖",true);
@@ -37,13 +38,24 @@ var server = app.listen(8090, () => {
 });
 //发送给页面请求
 app.all("/", (req,res) => {
- 
+  let returnData = {
+    company:"",
+    err:"",
+    list:[
+      
+    ]
+  }  
   if ( null == req.query.name || req.query.name ==="" ) {
     vice.errreptile(function(indexData){
       res.send(indexData);
     })
   }else{
     vice.reptile("all",req.query.name,function(indexData){
+      // 要做一下筛选，排除掉一样的内容
+      returnData.company = indexData.company;
+      returnData.err = indexData.err;
+      // console.log(indexData);
+     
       res.send(indexData);
     })
       
