@@ -1,0 +1,46 @@
+<!-- 查六个旅游网站返回的ejs模板 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>爬虫-旅游网站</title>
+  <!-- 引入的css部分 -->
+  <link href="/common/react.css" rel="stylesheet" type="text/css">  
+  <link href="/css/tourism.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="content clearfix">
+    <div class="select">
+      <i class="icon"></i>
+      <span class="name"><%=company%></span>
+    </div>
+    <ul class="subject clearfix">
+      <!-- indexData -->
+      <% for(var i = 0;i<list.length;i++){%>
+        <li class="itemContent">
+          <img src="<%=list[i].push[0].img%>"  class="img"/>
+          <h3 class="company"><%=list[i].company%></h3>
+          <div class="item">
+            <h4 class="name"><%=list[i].push[0].name%></h4>
+            <div class="text clearfix">
+              <div class="time">
+                  <%=list[i].push[0].time%>
+              </div>
+              <div class="center clearfix">
+                <div class="price">
+                  <span class="number">￥<%=list[i].push[0].price%></span>
+                </div>
+                <div class="type">
+                    <%=list[i].push[0].type%>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </li>
+      <%}%>
+    </ul>
+  </div>
+</body>
+</html>

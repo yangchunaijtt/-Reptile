@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>爬虫-旅游网站</title>
+  <!-- 引入的css部分 -->
+  <link href="/common/react.css" rel="stylesheet" type="text/css">  
+  <link href="/css/tourismPhone.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="tourism clearfix">
+    <h3 class="company"><%=company%></h3>
+    <ul class="content clearfix">
+      <% for(var i = 0;i<list.length;i++){%>
+        <li class="item clearfix">
+          <div class="left clearfix imgdiv">
+            <img src="<%=list[i].push[0].img%>" class="img" />
+          </div>
+          <div class="right clearfix text">
+            <h5 class="name"><%=list[i].push[0].name%></h5>
+            <p class="time"><%=list[i].push[0].time%></p>
+            <div class="center clearfix">
+              <span class="type"><%=list[i].push[0].type%></span>
+              <div class="money clearfix">
+                <span class="price">￥<%=list[i].push[0].price%></span>
+              </div>
+            </div>
+          </div>
+        </li>
+      <%}%>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>爬虫-百度信用</title>
+  <!-- 引入的css内容 -->
+  <link href="/common/react.css" rel="stylesheet" type="text/css">  
+  <link href="/css/creditPhone.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div class="credit clearfix">
+    <h3 class="select">查询名称：<%=company%></h3>
+    <ul class="content">
+      <li class="item clearfix">
+        <h5 class="title">法定代表人：</h5>
+        <span  class="text"><%=legalPerson%></span>
+      </li>
+      <li class="item clearfix">
+        <h5 class="title">纳税人识别号：</h5>
+        <span  class="text"><%=taxNo%></span>
+      </li>
+      <li class="item clearfix">
+        <h5 class="title">注册地址：</h5>
+        <span  class="text"><%=regAddr%></span>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

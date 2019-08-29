@@ -1,0 +1,96 @@
+/* 手机端旅游爬虫数据 */
+.tourism{
+  margin-top:10px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  background:#fff;
+}
+.tourism .company{
+  display: block;
+  line-height: 18px;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 15px 15px 0 15px;
+  color: #000;
+}
+
+/* 主体ul部分内容 */
+.content{
+  display: block;
+  padding: 15px 15px 0 15px;
+}
+.content .item{
+  display: flex;
+  padding-top: 15px;
+  margin-bottom: 15px;
+  border-top: 1px solid #e6e5e5;
+}
+/* 左边图片内容 */
+.content .item .imgdiv{
+  margin-right: 10px;
+  width: 150px;
+  height: 100px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.content .item .imgdiv .img{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* 右边介绍内容 */
+.text{
+  flex: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  position: relative;
+}
+.text .name{
+  display: block;
+  height: 36px;
+  line-height: 19px;
+  margin-bottom: 5px;
+  font-size: 15px;
+  color:#000;
+  overflow: hidden;
+}
+.text .time{
+  font-size: 12px;
+  color: #999;
+  overflow: hidden;
+  line-height: 16px;
+  height: 16px;
+}
+.text .center{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.text  .center .type{
+  display: inline-block;
+  width: 40px;
+  margin-right: 4px;
+  padding: 0 5px;
+  height: 20px;
+  line-height: 20px;
+  color: #19a0f0;
+  border: 1px solid #e0dbdb;
+  border-radius: 2px;
+  font-size: 11px;
+  overflow: hidden;
+  text-align: center;
+}
+.text  .center .money{
+  display: inline-block;
+  max-width: 120px;
+  float: right;
+  overflow: hidden;
+}
+.text  .center .money .price{
+  line-height: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 0 2px;
+  color: #f60;
+}

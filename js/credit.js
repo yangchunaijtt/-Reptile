@@ -13,7 +13,8 @@ function creditQuery(req,fun){
   let dataUrl = "";
   let basicUrl = "";
   let  creditData = {
-    err:"0"
+    company:"",
+    err:"0",
   }
   /**
    * 百度信用举例：
@@ -45,10 +46,11 @@ function creditQuery(req,fun){
                     data = JSON.parse(response.body).data;
                   
                       creditData.err="1"
-                      creditData.legalPerson=data.legalPerson;
-                      creditData.taxNo=data.taxNo===""?data.regNo:data.taxNo;
-                      creditData.licenseNumber=data.licenseNumber;
-                      creditData.regAddr=data.regAddr;
+                      creditData.legalPerson = data.legalPerson;
+                      creditData.taxNo = data.taxNo === "" ?data.regNo:data.taxNo;
+                      creditData.licenseNumber = data.licenseNumber;
+                      creditData.regAddr = data.regAddr;
+                      creditData.company = req;
                     fun(creditData);
                   }
                 })
@@ -58,7 +60,9 @@ function creditQuery(req,fun){
             })
           }
     }else {
+
       fun(creditData);
+      
     }
     
   })

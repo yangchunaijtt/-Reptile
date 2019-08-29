@@ -1,0 +1,132 @@
+/* tourism模板设置内容 */
+.content{
+  width: 1358px;
+  margin: 0 auto;
+  margin-top: 100px;
+  background:#fff;
+}
+
+/* 上半部分内容 */
+.select{
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  background-color: #FAFAFA;
+  color: #333;
+}
+.select .icon{
+  height:24px;
+  display: inline-block;
+  float:left;
+  border:3px solid #01c192;
+}
+.select .name{
+  display: inline-block;
+  float:left;
+  margin-left:16px;
+}
+
+/* 下半部分内容 */
+.subject{
+  width: 1358px;
+  overflow: hidden;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top:10px;
+  border: none;
+  float: left;
+}
+.subject li{
+  float: left;
+  display: inline;
+  width: 210px;
+  position: relative;
+  top:0;
+  left:0;
+  margin-left: 14px;
+  text-align: left;
+  line-height: 20px;
+  border: 1px solid #ecebeb;
+}
+.subject li .img{
+  width:100%;
+  height:146px;
+}
+.subject li .company{
+  display: block;
+  position: absolute;
+  top: 122px;
+  left: 0;
+  width: 100%;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+}
+/* 字体部分内容 */
+.subject li .item{
+  
+}
+.subject li .item .name{
+  display: block;
+  color: #000;
+  width: 200px;
+  height: 40px;
+  line-height: 20px;
+  padding: 5px 5px 3px 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 钱和当地游 */
+.subject li .item .text .center{
+  padding: 8px 0px;
+}
+.subject li .item .text .center .price{
+  color: #f60;
+  line-height: 22px;
+  text-align: center;
+  font-weight: 800;
+  width: 85px;
+  font-size: 13px;
+  float: left;
+  margin-right: 4px;
+  background-color: #fff;
+}
+.subject li .item .text .center .price .number{
+  font-size: 20px;
+  font-weight: 800;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.subject li .item .text .center  .type{
+  display: inline-block;
+  width: 60px;
+  height: 26px;
+  margin-right: 6px;
+  line-height: 26px;
+  font-size: 12px;
+  float: right;
+  text-align: center;
+  color: #fff;
+  background: #f80;
+  border:none;
+  border-radius: 2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 时间设置部分 */
+.subject li .item .text  .time{
+  width: 200px;
+  height: 22px;
+  padding: 5px 5px 3px 5px;
+  line-height: 22px;
+  text-indent: 4px;
+  color: #5d5959;
+  font-size:12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

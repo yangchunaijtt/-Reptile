@@ -10,10 +10,11 @@ const cheerio = require('cheerio');
 
 //返回的数据
 let data = [];
-let tuniuReq = "";  //输入给途牛的查询数据
-let ctripReq = "";  //输入给携程的查询数据
+let tuniuReq = "";  // 输入给途牛的查询数据
+let ctripReq = "";  // 输入给携程的查询数据
 let lvmamaReq = ""; // 输入给驴妈妈的查询数据
 let figgyReq = "";  // 输入给飞猪的查询数据
+
 let sameWayReq = "";  // 输入给同程旅游的查询数据
 // 返回给首页的数据
 let indexData = {
@@ -73,7 +74,7 @@ function errreptile(fun){
 function send(tips,req,fun){
   req = encodeURI(req); // 把中文转成UrlEncode编码
   let url = "";         // 请求的地址
-  console.log(tips);
+  // console.log(tips);
   if ( tips == "ctrip" ) {
     // 携程调用了
     /**

@@ -12,13 +12,12 @@
  *  1：携程调用数据问题
  *  2：如何向上一层返回数据
  */
-// const tuniu = require("./js/tuniu");    //应用获取途牛的数据
-const express = require('express');//引入express 
+// const tuniu = require("./js/tuniu");    // 应用获取途牛的数据
+const express = require('express'); // 引入express 
 
 
 const credit = require("./js/credit");
 const vice = require("./vice");
-
 
 
 // 调用
@@ -31,6 +30,16 @@ const vice = require("./vice");
  * 本地服务部分代码
  */
 const app = express();// 初始化
+
+//配置部分内容
+
+// 配置ejs内容
+app.set('views', __dirname + '/views');          // js文件用views里面的
+app.use(express.static(__dirname + '/public')); //静态文件用public里面的
+
+// 全局参数
+let isEnd = "pc";   // 设置访问我这个api的设备，默认手机端访问我这个api。
+
 //配置服务端口
 
 var server = app.listen(8090, () => {
@@ -45,20 +54,26 @@ app.all("/", (req,res) => {
       
     ]
   }  
-  if ( null == req.query.name || req.query.name ==="" ) {
-    vice.errreptile(function(indexData){
-      res.send(indexData);
-    })
+  // console.log(req.query);
+  // 赋值
+  isEnd = req.query.isend;
+  if ( null == req.query.name || req.query.name ==="") {
+    res.send("没有传入参数");
+  }else if ( isEnd != "pc" && isEnd != "phone" ){
+    res.send("isend设备参数出错");
   }else{
     vice.reptile("all",req.query.name,function(indexData){
       // 要做一下筛选，排除掉一样的内容
-      returnData.company = indexData.company;
-      returnData.err = indexData.err;
+      // returnData.company = indexData.company;
+      // returnData.err = indexData.err;
       // console.log(indexData);
-     
-      res.send(indexData);
-    })
-      
+      if ( isEnd === "pc" ) {
+        res.render("tourism.ejs",indexData);
+      }else if ( isEnd === "phone" ) {
+        res.render("tourismPhone.ejs",indexData);
+      }
+      // res.send(indexData);
+    }) 
     }
 
 });
@@ -67,18 +82,23 @@ app.all("/", (req,res) => {
 app.get("/credit", (req,res) => {
   //let ddd=req.param.ss
   // console.log(req.query.name);
+  // 赋值
+  isEnd = req.query.isend;
   if ( null == req.query.name || req.query.name ==="" ) {
-    res.send({
-      err:"0"
-    });
-  } else {
+    res.send("没有传入参数");
+  }else if ( isEnd != "pc" && isEnd != "phone"  ){
+    res.send("isend传入参数出错");
+  }else {
     credit.creditQuery(req.query.name,function(creditData){
       // console.log(creditData);
-      res.send(creditData);
+      // res.send(creditData);
+      if ( isEnd === "pc" ) {
+        res.render("credit.ejs",creditData);
+      }else if (  isEnd === "phone"  ){
+        res.render("creditPhone.ejs",creditData);
+      }
+      
     })
   }
   
 });
-
-
-

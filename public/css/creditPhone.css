@@ -1,0 +1,48 @@
+/* 百度信用 */
+.credit{
+  padding-bottom: 30px;
+  margin-top: 20px;
+  background: #fff;
+}
+/* 标题设置 */
+.credit .select{
+  width: 100%;
+  height: 46px;
+  display: block;
+  border-bottom: 1px solid #f0f0f0;
+  text-align: center;
+  line-height: 46px;
+  font-size: 18px;
+  color: #243149;
+  font-weight: 500;
+}
+/* ul设置和li设置 */
+.credit .content{
+  padding: 0 10px;
+  overflow: hidden;
+  font-size: 14px;
+  background: #f9fbfc;
+}
+.credit .content .item{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  height: 40px;
+  padding: 0 10px;
+  line-height: 40px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  font-weight: 400;
+}
+/* item里面内容设置 */
+.credit .content .item .title{
+  display: inline-block;
+  width:110px;
+  color: #999;
+}
+.credit .content .item .text{
+  flex:1;
+  color:#000;
+}
+
