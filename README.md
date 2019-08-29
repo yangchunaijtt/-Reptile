@@ -11,8 +11,10 @@
   通过路由url传值
   例
   ```
-   http://localhost:8090/?name=%E9%95%BF%E5%9F%8E
-   http://localhost:8090/credit?name=%E6%89%AC%E5%B7%9E%E5%A4%A7%E5%AD%A6
+   http://localhost:8090/?name=西湖&isend=pc
+   http://localhost:8090/?name=西湖&isend=phone
+   http://localhost:8090/credit?name=扬州大学&isend=pc
+   http://localhost:8090/credit?name=扬州大学&isend=phone
   ```
   路由输错了，会返回错误的提示
   ```
